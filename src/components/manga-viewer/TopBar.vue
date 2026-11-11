@@ -41,14 +41,14 @@ function goBack() {
 </script>
 
 <template>
-  <div class="top-bar" data-tauri-drag-region>
+  <div class="top-bar" data-tauri-drag-region="deep">
     <IconButton
       :icon="ArrowLeft"
       :label="$t('reader.back')"
       placement="bottom"
       @click="goBack"
     />
-    <h1 class="top-bar__title" :title="props.title" data-tauri-drag-region>{{ shortTitle }}</h1>
+    <h1 class="top-bar__title" :title="props.title">{{ shortTitle }}</h1>
     <IconButton
       v-if="props.tocAvailable"
       :icon="ListOrdered"

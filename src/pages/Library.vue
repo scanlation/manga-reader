@@ -225,13 +225,13 @@ onMounted(() => {
 <template>
   <DropOverlay @drop="onWebDrop">
     <div class="page lib">
-      <!-- 桌面端无边框：顶栏即拖拽区（data-tauri-drag-region）；右侧为设置与窗口控制按钮 -->
-      <header class="lib__topbar" data-tauri-drag-region>
+      <!-- 桌面端无边框：顶栏 deep 拖拽区（按钮/链接仍可点击）；右侧为设置与窗口控制按钮 -->
+      <header class="lib__topbar" data-tauri-drag-region="deep">
         <div class="lib__brand">
           <RouterLink to="/" class="lib__back" :aria-label="$t('reader.back')">
             <ArrowLeft :size="17" />
           </RouterLink>
-          <span class="lib__brand-name" data-tauri-drag-region>{{ $t("library.title") }}</span>
+          <span class="lib__brand-name">{{ $t("library.title") }}</span>
         </div>
         <div class="lib__topbar-actions">
           <IconButton

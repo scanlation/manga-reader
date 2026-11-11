@@ -104,11 +104,11 @@ function pendingLabel(item: OpenItem): string {
 <template>
   <DropOverlay @drop="onWebDrop">
     <div class="page landing">
-      <!-- 桌面端无边框：顶栏即拖拽区（data-tauri-drag-region）；右侧为窗口控制按钮 -->
-      <header class="landing__topbar" data-tauri-drag-region>
+      <!-- 桌面端无边框：顶栏 deep 拖拽区（按钮/链接仍可点击）；右侧为窗口控制按钮 -->
+      <header class="landing__topbar" data-tauri-drag-region="deep">
         <div class="landing__brand">
-          <Image :size="22" class="landing__brand-icon" data-tauri-drag-region />
-          <span class="landing__brand-name" data-tauri-drag-region>{{ $t("common.appName") }}</span>
+          <Image :size="22" class="landing__brand-icon" />
+          <span class="landing__brand-name">{{ $t("common.appName") }}</span>
         </div>
         <div class="landing__topbar-actions">
           <RouterLink to="/library" class="landing__nav">

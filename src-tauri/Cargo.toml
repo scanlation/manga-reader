@@ -1,6 +1,6 @@
 [package]
 name = "manga-tools-reader"
-version = "0.1.0"
+version = "0.5.0"
 description = "Manga/comic reader built with Vue3 + Tauri, runs on web and desktop"
 authors = ["manga-tools-reader"]
 edition = "2024"
