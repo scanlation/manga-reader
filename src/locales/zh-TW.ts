@@ -15,6 +15,9 @@ export default {
     pageOf: "第 {current} / {total} 頁",
     increase: "增加",
     decrease: "減少",
+    minimize: "最小化",
+    maximize: "最大化",
+    restore: "還原",
   },
 
   landing: {

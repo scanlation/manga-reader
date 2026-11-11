@@ -1,5 +1,6 @@
 <script setup lang="ts">
-// 上工具条：返回（图标）、文件名（唯一文字、自动撑开）、目录、设置、最近打开（图标+tooltip）。
+// 上工具条：返回（图标）、文件名（唯一文字、自动撑开）、目录、最近打开、设置、窗口控制。
+// 桌面端无边框窗口：整条工具条即拖拽区（data-tauri-drag-region），右侧为窗口控制按钮。
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import {
@@ -10,6 +11,7 @@ import {
 } from "lucide-vue-next";
 
 import IconButton from "@/components/ui/IconButton.vue";
+import WindowControls from "@/components/ui/WindowControls.vue";
 
 const props = defineProps<{
   title: string;
@@ -39,14 +41,14 @@ function goBack() {
 </script>
 
 <template>
-  <div class="top-bar">
+  <div class="top-bar" data-tauri-drag-region>
     <IconButton
       :icon="ArrowLeft"
       :label="$t('reader.back')"
       placement="bottom"
       @click="goBack"
     />
-    <h1 class="top-bar__title" :title="props.title">{{ shortTitle }}</h1>
+    <h1 class="top-bar__title" :title="props.title" data-tauri-drag-region>{{ shortTitle }}</h1>
     <IconButton
       v-if="props.tocAvailable"
       :icon="ListOrdered"
@@ -68,6 +70,7 @@ function goBack() {
       :active="props.settingsActive"
       @click="emit('toggleSettings')"
     />
+    <WindowControls />
   </div>
 </template>
 

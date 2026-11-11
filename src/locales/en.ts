@@ -15,6 +15,9 @@ export default {
     pageOf: "Page {current} of {total}",
     increase: "Increase",
     decrease: "Decrease",
+    minimize: "Minimize",
+    maximize: "Maximize",
+    restore: "Restore",
   },
 
   landing: {

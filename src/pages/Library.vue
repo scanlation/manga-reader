@@ -11,8 +11,8 @@ import {
   FileArchive,
   Folder,
   FolderOpen,
-  Library,
   Search,
+  Settings2,
   Square,
   X,
 } from "lucide-vue-next";
@@ -20,8 +20,9 @@ import {
 import { useOpenFlow } from "@/components/landing/useOpenFlow";
 import DropOverlay from "@/components/landing/DropOverlay.vue";
 import AppModal from "@/components/ui/AppModal.vue";
-import LangSwitcher from "@/components/ui/LangSwitcher.vue";
-import ThemeToggle from "@/components/ui/ThemeToggle.vue";
+import IconButton from "@/components/ui/IconButton.vue";
+import SettingsPanel from "@/components/manga-viewer/SettingsPanel.vue";
+import WindowControls from "@/components/ui/WindowControls.vue";
 import { useHistoryStore } from "@/stores/history";
 import { deleteHandle } from "@/lib/fs-handles";
 import { deleteCachedBook } from "@/lib/cached-books";
@@ -39,6 +40,9 @@ interface Group {
 const { t } = useI18n();
 const openFlow = useOpenFlow();
 const historyStore = useHistoryStore();
+
+// 设置面板（仅外观：语言/主题），与首页/阅读页一致
+const settingsOpen = ref(false);
 
 const { showPickerModal, pendingItems } = openFlow;
 
@@ -221,17 +225,23 @@ onMounted(() => {
 <template>
   <DropOverlay @drop="onWebDrop">
     <div class="page lib">
-      <header class="lib__topbar">
+      <!-- 桌面端无边框：顶栏即拖拽区（data-tauri-drag-region）；右侧为设置与窗口控制按钮 -->
+      <header class="lib__topbar" data-tauri-drag-region>
         <div class="lib__brand">
           <RouterLink to="/" class="lib__back" :aria-label="$t('reader.back')">
             <ArrowLeft :size="17" />
           </RouterLink>
-          <Library :size="20" class="lib__brand-icon" />
-          <span class="lib__brand-name">{{ $t("library.title") }}</span>
+          <span class="lib__brand-name" data-tauri-drag-region>{{ $t("library.title") }}</span>
         </div>
         <div class="lib__topbar-actions">
-          <LangSwitcher />
-          <ThemeToggle />
+          <IconButton
+            :icon="Settings2"
+            :label="$t('reader.settings')"
+            placement="bottom"
+            :active="settingsOpen"
+            @click="settingsOpen = !settingsOpen"
+          />
+          <WindowControls />
         </div>
       </header>
 
@@ -416,6 +426,13 @@ onMounted(() => {
         </button>
       </div>
     </AppModal>
+
+    <!-- 设置面板：仅外观（语言/主题） -->
+    <SettingsPanel
+      :open="settingsOpen"
+      appearance-only
+      @close="settingsOpen = false"
+    />
 
     <!-- 多文件选择弹窗（拖入多个文件时二选一） -->
     <AppModal
