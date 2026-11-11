@@ -27,14 +27,12 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      # 前端：pnpm（与仓库 pnpm-lock.yaml / pnpm-workspace.yaml 对应）
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
+      # 前端：pnpm（版本由 package.json 的 packageManager 字段锁定，与本地一致）
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -62,7 +60,7 @@ jobs:
       # 构建 + 发布草稿。tagName 用 __VERSION__ 模板时版本号来自 tauri.conf.json；
       # 由 v* 标签触发时直接沿用该标签名。
       - name: Build and release
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
