@@ -145,7 +145,6 @@ function encodePng(size, rgba) {
 // ---------- 生成 ----------
 
 const targets = [
-  { file: "favicon-32.png", size: 32, maskable: false },
   { file: "icon-192.png", size: 192, maskable: false },
   { file: "icon-512.png", size: 512, maskable: false },
   { file: "icon-maskable-512.png", size: 512, maskable: true },

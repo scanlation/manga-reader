@@ -36,13 +36,13 @@ const STORAGE_KEY = "mtr:settings";
 const DEFAULTS: ReaderSettings = {
   readingBg: "black",
   readMode: "single",
-  fitMode: "fitWidth",
+  fitMode: "fitHeight",
   preloadCount: 2,
   safeAreaWidth: 0,
   autoPageInterval: 0,
   dualPageOffset: 0,
   wheelPageTurn: true,
-  rtl: false,
+  rtl: true,
 };
 
 /** 旧版本持久化值的规范化（钳制到现行取值范围）。 */
@@ -51,7 +51,10 @@ function normalize(v: ReaderSettings): ReaderSettings {
   v.safeAreaWidth = Math.min(50, Math.max(0, Math.round(v.safeAreaWidth / 5) * 5 || 0));
   v.autoPageInterval = Math.min(600, Math.max(0, Math.round(v.autoPageInterval) || 0));
   v.dualPageOffset = Math.min(1, Math.max(-1, Math.round(v.dualPageOffset) || 0));
-  if (v.fitMode !== "fitHeight") v.fitMode = "fitWidth";
+  if (v.fitMode !== "fitWidth" && v.fitMode !== "fitHeight") v.fitMode = "fitHeight";
+  if (v.readMode !== "single" && v.readMode !== "waterfall" && v.readMode !== "dual") {
+    v.readMode = "single";
+  }
   return v;
 }
 

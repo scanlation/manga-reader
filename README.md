@@ -5,6 +5,8 @@
 - **桌面端**（Tauri生成多平台程序端）：原生解压，速度快、内存占用低，支持 ZIP、CBZ、EPUB、RAR、CBR、7Z、TAR（含 .tar.gz / .tar.bz2）与文件夹；
 - **网页端**（Vue 3 + Vite）：ZIP、CBZ、EPUB、文件夹拖拽直接阅读；RAR / 7Z / TAR 由浏览器内 WASM（libarchive.js）解压支持，大文件建议使用桌面端。
 
+**在线体验（网页端）：<https://mhydq.com>**
+
 所有文件均在本地处理，不上传任何服务器。
 
 ## 功能
