@@ -1,0 +1,34 @@
+{
+  "name": "manga-reader",
+  "private": true,
+  "version": "0.5.0",
+  "type": "module",
+  "scripts": {
+    "postinstall": "node scripts/copy-vendor.mjs",
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build && node scripts/inject-sw-precache.mjs",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "icons": "node scripts/gen-icons.mjs"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2.8.4",
+    "@tauri-apps/plugin-opener": "^2",
+    "fflate": "^0.8.3",
+    "libarchive.js": "^2.0.2",
+    "lucide-vue-next": "^1.0.0",
+    "pinia": "^4.1.0",
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.4.18",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "sass": "^1.108.0",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.16",
+    "vue-tsc": "^3.3.5"
+  }
+}

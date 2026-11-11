@@ -1,0 +1,74 @@
+# Tauri 桌面端自动打包：推送 v* 标签（或在 Actions 页手动触发）时
+# 分别在 Windows / macOS / Linux 上构建安装包，并发布为 GitHub Release 草稿。
+# 版本号取自 src-tauri/tauri.conf.json 的 version 字段；发版前先把它和 Cargo.toml
+# 的 version 一并 bump，再打同名标签（如 v0.2.0）。
+name: Desktop Release (Tauri)
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: write # tauri-action 创建 Release 并上传产物需要写权限
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest # Windows x64：NSIS 安装器 + MSI
+          - platform: macos-latest # macOS Apple Silicon：aarch64 DMG
+            args: --target aarch64-apple-darwin
+          - platform: macos-latest # macOS Intel：x86_64 DMG
+            args: --target x86_64-apple-darwin
+          - platform: ubuntu-22.04 # Linux：AppImage + deb
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # 前端：pnpm（与仓库 pnpm-lock.yaml / pnpm-workspace.yaml 对应）
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Rust：稳定版工具链；macOS 两个 job 各自只装对应 target 即可
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.args && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      # Rust 编译缓存（Cargo 工程位于 src-tauri/）
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      # Linux 需要的 WebKitGTK 等系统依赖（Tauri v2 用 webkit2gtk-4.1）
+      - name: Install Linux system dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+
+      # 构建 + 发布草稿。tagName 用 __VERSION__ 模板时版本号来自 tauri.conf.json；
+      # 由 v* 标签触发时直接沿用该标签名。
+      - name: Build and release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_type == 'tag' && github.ref_name || 'v__VERSION__' }}
+          releaseName: ${{ github.ref_type == 'tag' && github.ref_name || 'MangaTools Reader v__VERSION__' }}
+          releaseBody: "See the assets to download this version and install."
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

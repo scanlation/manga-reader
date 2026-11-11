@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="theme-color" content="#5b6cff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="漫画阅读器（mhydq.com）— 本地漫画阅读工具：ZIP / CBZ / EPUB / RAR / 7Z / TAR 与文件夹直接读取，多种阅读模式与翻页习惯，文件与历史记录不上传、全程本地阅读。"
+    />
+    <title>漫画阅读器 · mhydq.com</title>
+    <script>
+      // 防闪白：在 Vue 挂载前同步解析主题与语言偏好
+      (function () {
+        try {
+          var theme = localStorage.getItem("mtr:theme") || "system";
+          var dark =
+            theme === "dark" ||
+            (theme === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.dataset.theme = dark ? "dark" : "light";
+          var lang = localStorage.getItem("mtr:locale");
+          if (lang) document.documentElement.lang = lang;
+        } catch (e) {
+          /* ignore */
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

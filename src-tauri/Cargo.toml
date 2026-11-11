@@ -1,0 +1,40 @@
+[package]
+name = "manga-tools-reader"
+version = "0.1.0"
+description = "Manga/comic reader built with Vue3 + Tauri, runs on web and desktop"
+authors = ["manga-tools-reader"]
+edition = "2024"
+
+[lib]
+# The `_lib` suffix is necessary to make the lib name unique on Windows.
+# See https://github.com/rust-lang/cargo/issues/8519
+name = "manga_tools_reader_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# 压缩包格式支持（PC 端）：
+# zip/cbz/epub 用 zip（随机访问按需读取）；rar/cbr 用 unrar（整包解压到临时目录）；
+# 7z 用 sevenz-rust（解压到临时目录）；tar/tar.gz/tar.bz2 用 tar + flate2/bzip2；
+# 文件夹遍历用 walkdir。
+zip = { version = "4", default-features = false, features = ["deflate", "bzip2", "aes-crypto"] }
+unrar = "0.5"
+sevenz-rust = "0.6"
+tar = "0.4"
+flate2 = "1"
+bzip2 = "0.4"
+walkdir = "2"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true

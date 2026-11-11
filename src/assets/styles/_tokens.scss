@@ -1,0 +1,96 @@
+// 设计令牌：双主题（浅色 light / 深色 dark）。
+// 通过 html[data-theme="light|dark"] 切换；JS 侧仅设置 data-theme 与 --accent 等。
+// 所有组件样式引用这些 CSS 自定义属性，不直接写死颜色。
+
+@use "sass:color";
+
+// ---------- 通用 ----------
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 16px;
+
+$z-overlay: 100;
+$z-bars: 60;
+$z-toast: 200;
+
+// ---------- 浅色主题 ----------
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg-page: #f5f6f8;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #eef0f3;
+  --bg-glass: rgba(255, 255, 255, 0.86);
+  --bg-hover: rgba(15, 23, 42, 0.06);
+  --bg-active: rgba(15, 23, 42, 0.1);
+
+  --text-1: #1a2233;
+  --text-2: #5a6478;
+  --text-3: #8b93a5;
+  --text-on-accent: #ffffff;
+
+  --border-1: rgba(15, 23, 42, 0.1);
+  --border-2: rgba(15, 23, 42, 0.18);
+
+  --accent: #5b6cff;
+  --accent-hover: #4a5af0;
+  --accent-soft: rgba(91, 108, 255, 0.12);
+
+  --danger: #e5484d;
+  --warning: #f5a623;
+  --success: #30a46c;
+
+  --shadow-1: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-2: 0 6px 24px rgba(15, 23, 42, 0.12);
+  --shadow-bar: 0 4px 20px rgba(15, 23, 42, 0.16);
+}
+
+// ---------- 深色主题 ----------
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-page: #101218;
+  --bg-surface: #1a1d26;
+  --bg-surface-2: #22262f;
+  --bg-glass: rgba(26, 29, 38, 0.86);
+  --bg-hover: rgba(255, 255, 255, 0.07);
+  --bg-active: rgba(255, 255, 255, 0.12);
+
+  --text-1: #e8eaf0;
+  --text-2: #9aa2b5;
+  --text-3: #626b80;
+  --text-on-accent: #ffffff;
+
+  --border-1: rgba(255, 255, 255, 0.09);
+  --border-2: rgba(255, 255, 255, 0.16);
+
+  --accent: #6e7fff;
+  --accent-hover: #828fff;
+  --accent-soft: rgba(110, 127, 255, 0.16);
+
+  --danger: #ff6369;
+  --warning: #ffb224;
+  --success: #3dd68c;
+
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --shadow-bar: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+// ---------- 语义别名（组件层只用别名） ----------
+:root {
+  --radius-sm: #{$radius-sm};
+  --radius-md: #{$radius-md};
+  --radius-lg: #{$radius-lg};
+
+  --z-overlay: #{$z-overlay};
+  --z-bars: #{$z-bars};
+  --z-toast: #{$z-toast};
+
+  --font-ui: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC",
+    system-ui, sans-serif;
+
+  --bar-height: 56px;
+  --bar-hotzone: 72px;
+  --tooltip-delay: 350ms;
+}

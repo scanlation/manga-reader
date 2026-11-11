@@ -1,0 +1,110 @@
+// 全局基础样式：reset、根布局、通用元素。
+@use "./tokens" as *;
+@use "./mixins" as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-1);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; // 应用自身管理滚动（阅读页画布/面板内滚动）
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+}
+
+input,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// 通用页面容器（着陆页）
+.page {
+  height: 100%;
+  overflow-y: auto;
+  @include thin-scrollbar;
+}
+
+// 数字等宽（页码/百分比）
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+// 通用过渡
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.18s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.pop-enter-active,
+.pop-leave-active {
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+}
