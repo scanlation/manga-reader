@@ -114,6 +114,12 @@ export default {
     dualNeedsLandscape: "手机竖屏下不支持双页模式，请将设备横屏后使用",
   },
 
+  about: {
+    title: "关于本项目",
+    desc: "开源、免费的本地漫画阅读器，支持 ZIP / CBZ / EPUB / RAR / 7Z / TAR 与文件夹直读，一切都在本地完成。",
+    github: "GitHub 仓库",
+  },
+
   errors: {
     unsupported: "暂不支持此格式，或文件已损坏",
     corrupt: "文件解压失败：压缩包可能已损坏",

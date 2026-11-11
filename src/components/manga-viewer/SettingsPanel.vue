@@ -2,16 +2,19 @@
 // 设置面板：schema 驱动 —— 新增设置项只需扩展 settingSections 定义与渲染分支。
 // 分区：外观（语言/主题）、阅读（背景/预加载/滚轮翻页/日漫模式）。
 // 首页等无阅读上下文的页面传 appearanceOnly，只展示外观分区（语言/主题）。
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 import SidePanel from "@/components/ui/SidePanel.vue";
 import Segmented from "@/components/ui/Segmented.vue";
 import ToggleSwitch from "@/components/ui/ToggleSwitch.vue";
 import NumberInput from "@/components/ui/NumberInput.vue";
+import AppModal from "@/components/ui/AppModal.vue";
 import { useToast } from "@/components/ui/useToast";
+import { Github, Info } from "lucide-vue-next";
 import { IS_MOBILE } from "@/lib/capabilities";
 import { usePortraitOrientation } from "@/lib/viewport";
+import { GITHUB_URL, openExternal } from "@/lib/open-url";
 import {
   BG_VALUES,
   useSettingsStore,
@@ -44,6 +47,11 @@ const toast = useToast();
 
 // 手机竖屏不支持双页模式：选择时弹提示要求横屏，且不应用选择
 const isPortrait = usePortraitOrientation();
+
+// 关于本项目弹窗
+const aboutOpen = ref(false);
+// vite define 注入的构建版本（package.json version）
+const appVersion = __APP_VERSION__;
 
 // ---------- schema ----------
 interface SettingRow {
@@ -226,10 +234,35 @@ const sections = computed<SettingSection[]>(() =>
         <span v-if="row.hintKey" class="settings-row__hint">{{ $t(row.hintKey) }}</span>
       </div>
     </section>
+
+    <!-- 关于本项目：所有页面（含仅外观模式）都展示 -->
+    <div class="settings-about">
+      <button class="settings-about__btn" type="button" @click="aboutOpen = true">
+        <Info :size="15" />
+        <span>{{ $t("about.title") }}</span>
+      </button>
+    </div>
   </SidePanel>
+
+  <!-- 关于本项目弹窗 -->
+  <AppModal :open="aboutOpen" :title="$t('about.title')" :max-width="420" @close="aboutOpen = false">
+    <div class="about">
+      <img class="about__icon" src="/icon-512.png" alt="" />
+      <p class="about__name">{{ $t("common.appName") }}</p>
+      <p class="about__version num">v{{ appVersion }}</p>
+      <p class="about__desc">{{ $t("about.desc") }}</p>
+      <button class="about__github" type="button" @click="openExternal(GITHUB_URL)">
+        <Github :size="15" />
+        <span>{{ $t("about.github") }}</span>
+      </button>
+      <p class="about__privacy">{{ $t("landing.privacyNote") }}</p>
+    </div>
+  </AppModal>
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/mixins" as *;
+
 .settings-section {
   margin-bottom: 20px;
 
@@ -268,6 +301,94 @@ const sections = computed<SettingSection[]>(() =>
     font-size: 12px;
     line-height: 1.5;
     color: var(--text-3);
+  }
+}
+
+// ---------- 关于本项目 ----------
+.settings-about {
+  border-top: 1px solid var(--border-1);
+  padding-top: 12px;
+  margin-top: 4px;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-2);
+    background: var(--bg-surface);
+    color: var(--text-1);
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    @include focus-ring;
+
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+    }
+  }
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 8px 0 4px;
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
+    border-radius: 14px;
+  }
+
+  &__name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-1);
+  }
+
+  &__version {
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  &__desc {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin-top: 6px;
+  }
+
+  &__github {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-2);
+    background: var(--bg-surface);
+    color: var(--text-1);
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    @include focus-ring;
+
+    &:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+    }
+  }
+
+  &__privacy {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 8px;
   }
 }
 </style>

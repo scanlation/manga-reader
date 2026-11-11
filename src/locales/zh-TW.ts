@@ -116,6 +116,12 @@ export default {
     dualNeedsLandscape: "手機直向顯示不支援雙頁模式，請將裝置橫向後使用",
   },
 
+  about: {
+    title: "關於本專案",
+    desc: "開源、免費的本地漫畫閱讀器，支援 ZIP / CBZ / EPUB / RAR / 7Z / TAR 與資料夾直讀，一切都在本機完成。",
+    github: "GitHub 儲存庫",
+  },
+
   errors: {
     unsupported: "暫不支援此格式，或檔案已損壞",
     corrupt: "檔案解壓縮失敗：壓縮包可能已損壞",

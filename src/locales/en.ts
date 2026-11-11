@@ -119,6 +119,12 @@ export default {
       "Dual-page mode isn't available in portrait on phones. Please rotate your device to landscape.",
   },
 
+  about: {
+    title: "About this project",
+    desc: "A free and open-source local manga reader supporting ZIP / CBZ / EPUB / RAR / 7Z / TAR and folders — everything stays on your device.",
+    github: "GitHub repository",
+  },
+
   errors: {
     unsupported: "Format not supported, or the file is damaged",
     corrupt: "Failed to unpack: the archive may be corrupted",

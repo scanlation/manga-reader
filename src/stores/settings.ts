@@ -7,11 +7,16 @@ export type ReadingBg = "black" | "dark" | "gray" | "white";
 /** 阅读模式：单页（翻页）/ 瀑布流（上下拼接连续滚动）/ 双页（左右拼合） */
 export type ReadMode = "single" | "waterfall" | "dual";
 
+/** 基准适配模式：按宽度撑满 / 按高度撑满 */
+export type FitMode = "fitWidth" | "fitHeight";
+
 export interface ReaderSettings {
   /** 阅读区背景 */
   readingBg: ReadingBg;
   /** 阅读模式：单页 / 瀑布流 */
   readMode: ReadMode;
+  /** 基准适配模式（宽度/高度撑满），与设置共同保存、下次打开保持 */
+  fitMode: FitMode;
   /** 预加载页数：前后各 N 页（0–5） */
   preloadCount: number;
   /** 安全区宽度：两侧留白合计占窗口宽度的百分比（0–50，步进 5） */
@@ -31,6 +36,7 @@ const STORAGE_KEY = "mtr:settings";
 const DEFAULTS: ReaderSettings = {
   readingBg: "black",
   readMode: "single",
+  fitMode: "fitWidth",
   preloadCount: 2,
   safeAreaWidth: 0,
   autoPageInterval: 0,
@@ -45,6 +51,7 @@ function normalize(v: ReaderSettings): ReaderSettings {
   v.safeAreaWidth = Math.min(50, Math.max(0, Math.round(v.safeAreaWidth / 5) * 5 || 0));
   v.autoPageInterval = Math.min(600, Math.max(0, Math.round(v.autoPageInterval) || 0));
   v.dualPageOffset = Math.min(1, Math.max(-1, Math.round(v.dualPageOffset) || 0));
+  if (v.fitMode !== "fitHeight") v.fitMode = "fitWidth";
   return v;
 }
 

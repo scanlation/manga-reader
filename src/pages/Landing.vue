@@ -25,6 +25,7 @@ import WindowControls from "@/components/ui/WindowControls.vue";
 import AppModal from "@/components/ui/AppModal.vue";
 import { SUPPORTS_FOLDER } from "@/lib/capabilities";
 import { IS_TAURI } from "@/lib/platform";
+import { GITHUB_URL, openExternal } from "@/lib/open-url";
 import type { OpenItem } from "@/lib/sources";
 
 const { t } = useI18n();
@@ -178,8 +179,10 @@ function pendingLabel(item: OpenItem): string {
         <span class="landing__dock-divider" aria-hidden="true"></span>
       </template>
       <span class="landing__dock-item">
-        <Github :size="14" />
-        <span>{{ $t("landing.footerOpenSource") }}</span>
+        <a class="landing__dock-link" :href="GITHUB_URL" @click.prevent="openExternal(GITHUB_URL)">
+          <Github :size="14" />
+          <span>{{ $t("landing.footerOpenSource") }}</span>
+        </a>
       </span>
     </footer>
 
@@ -315,6 +318,20 @@ function pendingLabel(item: OpenItem): string {
     width: 1px;
     height: 14px;
     background: var(--border-2);
+  }
+
+  &__dock-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: inherit;
+    text-decoration: none; // 全局 a:hover 下划线对链接条目不适用
+    @include focus-ring;
+
+    &:hover {
+      color: var(--text-1);
+      text-decoration: none;
+    }
   }
 
   // 窄屏下悬浮条改为贴底信息栏，避免换行成团遮挡内容

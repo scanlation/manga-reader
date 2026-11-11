@@ -192,22 +192,19 @@ watch(
   { immediate: true },
 );
 
-// ---------- 翻页 + 工具条联动 ----------
-function goToWithFlash(index: number) {
+// ---------- 翻页（不联动工具条显隐：点击翻页/滚轮/快捷键不打断阅读） ----------
+function goTo(index: number) {
   reader.goTo(index);
-  barsRef.value?.flash();
 }
 
 function onWheelPage(direction: 1 | -1) {
   bottomBarRef.value?.onWheelPage(direction);
-  barsRef.value?.flash();
 }
 
 /** 点击左右 25% 区域翻页（方向已按日漫模式在画布内镜像完毕） */
 function onZonePage(direction: 1 | -1) {
   if (direction > 0) reader.nextPage();
   else reader.prevPage();
-  barsRef.value?.flash();
 }
 
 // ---------- 快捷键 ----------
@@ -229,10 +226,10 @@ function onKeydown(event: KeyboardEvent) {
 
   switch (action) {
     case "prevPage":
-      goToWithFlash(reader.pageIndex - 1);
+      goTo(reader.pageIndex - 1);
       break;
     case "nextPage":
-      goToWithFlash(reader.pageIndex + 1);
+      goTo(reader.pageIndex + 1);
       break;
     case "zoomIn":
       reader.zoomIn();

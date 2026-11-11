@@ -10,11 +10,11 @@ import { loadCachedBook, restoreItemFiles, saveCachedBook } from "@/lib/cached-b
 import { webRelativePath } from "@/lib/sources/web-folder";
 import { IS_TAURI } from "@/lib/platform";
 import { useHistoryStore } from "./history";
-import { useSettingsStore } from "./settings";
+import { useSettingsStore, type FitMode } from "./settings";
 import type { OpenItem, OpenedBook } from "@/lib/sources/types";
 import { openBook } from "@/lib/sources";
 
-export type FitMode = "fitWidth" | "fitHeight";
+export type { FitMode };
 
 const ZOOM_MIN = 0.125;
 const ZOOM_MAX = 8;
@@ -31,8 +31,8 @@ export const useMangaViewerStore = defineStore("mangaViewer", () => {
   // ---------- 状态 ----------
   const book = ref<Book | null>(null);
   const pageIndex = ref(0);
-  /** 基准适配模式（工具条两个按钮）；高亮只跟随它，缩放不清除 */
-  const fitMode = ref<FitMode>("fitWidth");
+  /** 基准适配模式（工具条两个按钮）；高亮只跟随它，缩放不清除。与设置共同持久化 */
+  const fitMode = ref<FitMode>(settingsStore.settings.fitMode);
   /** 当前页的缩放倍率（相对基准适配尺寸），翻页/重置后回到 1 */
   const fitScale = ref(1);
   /** 重置序号：重置缩放时自增，画布据此清除旋转/位移等手工状态 */
@@ -482,9 +482,10 @@ export const useMangaViewerStore = defineStore("mangaViewer", () => {
   );
 
   // ---------- 适配与缩放 ----------
-  /** 切换基准适配模式。仅改变基准，不动手工缩放倍率与高亮。 */
+  /** 切换基准适配模式。仅改变基准，不动手工缩放倍率与高亮；写入设置持久化。 */
   function setMode(mode: FitMode) {
     fitMode.value = mode;
+    settingsStore.patch({ fitMode: mode });
   }
 
   /** 设置当前页缩放倍率（越界裁剪；画布/捏合共用入口）。 */

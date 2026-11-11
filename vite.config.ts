@@ -1,4 +1,5 @@
 import { fileURLToPath, URL } from "node:url";
+import { readFileSync } from "node:fs";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -6,9 +7,18 @@ import vue from "@vitejs/plugin-vue";
 import process from "node:process";
 const host = process.env.TAURI_DEV_HOST;
 
+// 应用版本号（package.json version）注入前端常量 __APP_VERSION__，关于弹窗展示用
+const pkg = JSON.parse(
+  readFileSync(fileURLToPath(new URL("./package.json", import.meta.url)), "utf8"),
+) as { version: string };
+
 // https://vite.dev/config/
 export default defineConfig(() => ({
   plugins: [vue()],
+
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
 
   resolve: {
     alias: {
